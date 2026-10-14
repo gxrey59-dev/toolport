@@ -7,6 +7,15 @@ describe("teamUrlError", () => {
     expect(teamUrlError("https://teams.example.com")).toBeNull();
   });
 
+  it.each([
+    "https://user:secret@teams.example.com",
+    "https://user@teams.example.com",
+    "http://user:secret@localhost:8787",
+    "http://user:secret@[::1]:8787",
+  ])("rejects credentials embedded in %s", (url) => {
+    expect(teamUrlError(url)).toMatch(/credentials/);
+  });
+
   it("accepts loopback http for local development", () => {
     expect(teamUrlError("http://127.0.0.1:8787")).toBeNull();
     expect(teamUrlError("http://localhost:8787")).toBeNull();
