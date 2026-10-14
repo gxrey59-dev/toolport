@@ -9,6 +9,11 @@ export function teamUrlError(raw: string): string | null {
     return "Team server URL must start with https://.";
   }
 
+  // Team URLs are stored in the registry; authentication belongs in the vault.
+  if (url.username || url.password) {
+    return "Team server URL must not contain embedded credentials.";
+  }
+
   if (url.protocol === "https:") return null;
   if (url.protocol !== "http:") return "Team server URL must start with https://.";
 
